@@ -16,6 +16,16 @@ class EstudiantesController extends Controller
       $respuesta = Estudiante::create($inputs);
       return response()->json(['data'=> $inputs, 'mensaje' => 'Estudiante encontrado.']);
     }
+    public function show( $id){
+          $estudiante = Estudiante::find($id);
+
+    if (!$estudiante) {
+        return response()->json(['mensaje' => 'Estudiante no encontrado.'], 404);
+    }
+
+    return response()->json(['data' => $estudiante, 'mensaje' => 'Estudiante encontrado.']);
+
+    }
     public function update(Request $request, $id){
       $e = Estudiante::find($id);
       if (isset($e)){
