@@ -11,6 +11,7 @@ class Curso extends Model
 
     public $table = "cursos";
     protected $fillable = array("*");
+    // protected $fillable =  ['nombre','horas','id'];
     public function estudiantes(){
       return $this->belongsToMany(Estudiante::class, "curso_estudiante");
     }
