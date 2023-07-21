@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Curso;
+use App\Models\Estudiante;
 
 class CursosController extends Controller
 {
       public function index(){
       return Curso::all();
+      return Estudiante::all();
     }
     
     public function store(Request $request){
@@ -52,4 +54,22 @@ class CursosController extends Controller
         return response()->json(['error'=> true, 'mensaje' => 'No existe un curso con el id proporcionado.']);
       }
     }
+    // Método para relacionar un curso a un estudiante
+    public function relacionarEstudiante(Request $request, $id)
+    {
+      try {
+        $estudianteId = $request->input('id');
+
+        // Verificar que el estudiante y el curso existan
+        $curso = Curso::findOrFail($id);
+        $estudiante = Estudiante::findOrFail($estudianteId);
+
+        // Relacionar el estudiante con el curso
+        $curso->estudiantes()->attach($estudianteId);
+
+        return response()->json(['message' => 'El curso fue relacionado con el estudiante correctamente.']);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Ha ocurrido un error','error' => $e->getMessage()], 500);
+    }
+  }
 }

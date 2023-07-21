@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::apiResource("v1/usuarios", UserController::class);
 Route::apiResource("v1/estudiantes", EstudiantesController::class);
 Route::apiResource("v1/cursos", CursosController::class);
-Route::apiResource("v1/usuarios", UserController::class);
+Route::post('v1/estudiantes/{idEstudiante}/relacionar-curso', [EstudiantesController::class, 'relacionarCurso']);
+Route::post('v1/cursos/{idCurso}/relacionar-estudiante', [CursosController::class, 'relacionarEstudiante']);
+
