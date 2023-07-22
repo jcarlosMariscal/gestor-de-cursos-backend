@@ -16,7 +16,8 @@ class CursosController extends Controller
     public function store(Request $request){
       $inputs = $request -> input();
       $respuesta = Curso::create($inputs);
-      return response()->json(['data'=> $inputs, 'mensaje' => 'Curso encontrado.']);
+              $lastId = $respuesta->id;
+      return response()->json(['data'=> $inputs, 'mensaje' => 'Curso registrado.', "id" => $lastId]);
     }
     public function show( $id){
           $curso = Curso::find($id);

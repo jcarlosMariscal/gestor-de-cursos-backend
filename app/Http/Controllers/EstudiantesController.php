@@ -16,7 +16,8 @@ class EstudiantesController extends Controller
     public function store(Request $request){
       $inputs = $request -> input();
       $respuesta = Estudiante::create($inputs);
-      return response()->json(['data'=> $inputs, 'mensaje' => 'Estudiante encontrado.']);
+        $lastId = $respuesta->id;
+      return response()->json(['data'=> $inputs, 'mensaje' => 'Estudiante registrado.', "id" => $lastId]);
     }
     public function show( $id){
           $estudiante = Estudiante::find($id);
