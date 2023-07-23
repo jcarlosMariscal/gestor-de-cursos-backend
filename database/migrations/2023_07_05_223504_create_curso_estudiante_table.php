@@ -17,6 +17,9 @@ return new class extends Migration
             $table->foreign("curso_id")->references("id")->on("cursos")->onDelete("cascade");
             $table->unsignedBigInteger("estudiante_id");
             $table->foreign("estudiante_id")->references("id")->on("estudiantes")->onDelete("cascade");
+            $table->date("fecha_inscripcion");
+            $table->float("calificación");
+            $table->string("nota");
             $table->timestamps();
         });
     }
