@@ -11,7 +11,7 @@ class Estudiante extends Model
 
     public $table = "estudiantes";
     // protected $fillable = array("*");
-    protected $fillable = ['nombre','apellido','foto', 'telefono','email', 'generacio_id','id'];
+    protected $fillable = ['nombre','apellido','foto', 'telefono','email', 'generacion_id','id'];
     public function cursos(){
       return $this->belongsToMany(Curso::class, "curso_estudiante");
     }
