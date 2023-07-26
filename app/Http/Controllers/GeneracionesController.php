@@ -24,7 +24,7 @@ class GeneracionesController extends Controller
         return response()->json(['mensaje' => 'Generacion no encontrado.'], 404);
     }
 
-    return response()->json(['data' => $genereacion, 'mensaje' => 'Generacion encontrado.']);
+    return response()->json(['data' => $generacion, 'mensaje' => 'Generacion encontrado.']);
 
     }
     public function update(Request $request, $id){

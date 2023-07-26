@@ -61,14 +61,20 @@ class EstudiantesController extends Controller
     public function relacionarCurso(Request $request, $id)
     {
       try {
-        $cursoId = $request->input('id');
+                $cursoData = $request->only(['id', 'fecha_inscripcion', 'calificacion', 'nota']);
 
         // Verificar que el estudiante y el curso existan
         $estudiante = Estudiante::findOrFail($id);
-        $curso = Curso::findOrFail($cursoId);
+        $curso = Curso::findOrFail($cursoData['id']);
 
-        // Relacionar el estudiante con el curso
-        $estudiante->cursos()->attach($cursoId);
+        // Relacionar el estudiante con el curso y agregar los datos adicionales
+        $estudiante->cursos()->syncWithoutDetaching([
+            $cursoData['id'] => [
+                'fecha_inscripcion' => $cursoData['fecha_inscripcion'],
+                'calificacion' => $cursoData['calificacion'],
+                'nota' => $cursoData['nota'],
+            ],
+        ]);;
 
         return response()->json(['message' => 'El estudiante fue relacionado con el curso correctamente.']);
     } catch (\Exception $e) {
