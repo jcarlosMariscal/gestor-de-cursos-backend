@@ -61,7 +61,7 @@ class EstudiantesController extends Controller
     public function relacionarCurso(Request $request, $id)
     {
       try {
-                $cursoData = $request->only(['id', 'fecha_inscripcion', 'calificacion', 'nota']);
+        $cursoData = $request->only(['id', 'fecha_inscripcion', 'calificacion', 'nota']);
 
         // Verificar que el estudiante y el curso existan
         $estudiante = Estudiante::findOrFail($id);
@@ -81,4 +81,20 @@ class EstudiantesController extends Controller
         return response()->json(['message' => 'Ha ocurrido un error','error' => $e->getMessage()], 500);
     }
   }
+public function obtenerCursosEstudiante($id)
+{
+    try {
+        // Verificar que el estudiante exista
+        $estudiante = Estudiante::findOrFail($id);
+
+        // Obtener los registros del estudiante en todos los cursos
+        $registros = $estudiante->cursos;
+
+        return response()->json(['data' => $registros, 'message' => 'Registros del estudiante encontrados.']);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Ha ocurrido un error', 'error' => $e->getMessage()], 500);
+    }
+}
+
+
 }
