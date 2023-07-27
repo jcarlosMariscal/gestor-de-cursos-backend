@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Estudiante;
 use App\Models\Curso;
+use App\Models\Generacion;
 use Illuminate\Http\Request;
 
 class EstudiantesController extends Controller
@@ -11,6 +12,7 @@ class EstudiantesController extends Controller
     public function index(){
       return Estudiante::all();
       return Curso::all();
+      return Generacion::all();
     }
     
     public function store(Request $request){
@@ -91,6 +93,33 @@ public function obtenerCursosEstudiante($id)
         $registros = $estudiante->cursos;
 
         return response()->json(['data' => $registros, 'message' => 'Registros del estudiante encontrados.']);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Ha ocurrido un error', 'error' => $e->getMessage()], 500);
+    }
+}
+
+public function numeroEstudiantesGeneracion()
+{
+    try {
+        // Obtener el número de estudiantes por generación utilizando la función DB::raw() y selectRaw()
+        $estudiantesPorGeneracion = Estudiante::selectRaw('generacion_id, count(*) as numero_estudiantes')
+            ->groupBy('generacion_id')
+            ->orderBy('generacion_id', 'asc')
+            ->get();
+
+        $data = [];
+        foreach ($estudiantesPorGeneracion as $estudiantePorGeneracion) {
+            $generacion = Generacion::find($estudiantePorGeneracion->generacion_id);
+            if ($generacion) {
+                $data[] = [
+                    'generacion_id' => $generacion->id,
+                    'nombre_generacion' => $generacion->nombre,
+                    'numero_estudiantes' => $estudiantePorGeneracion->numero_estudiantes,
+                ];
+            }
+        }
+
+        return response()->json(['data' => $data]);
     } catch (\Exception $e) {
         return response()->json(['message' => 'Ha ocurrido un error', 'error' => $e->getMessage()], 500);
     }

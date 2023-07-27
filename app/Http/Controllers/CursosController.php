@@ -73,4 +73,34 @@ class CursosController extends Controller
         return response()->json(['message' => 'Ha ocurrido un error','error' => $e->getMessage()], 500);
     }
   }
+  // Método para obtener información de la tabla de relación
+// CursosController
+public function numeroEstudiantesEnCurso()
+{
+    try {
+        // Obtener los cursos junto con la información de cada curso y el conteo de estudiantes asociados
+        $cursosConInformacion = Curso::with('estudiantes')
+            ->select('id', 'nombre', 'descripcion', 'icono', 'color')
+            ->get();
+
+        // Formatear los resultados en un objeto JSON con la colección de arreglos asociativos
+        $informacionTablaRelacion = [];
+        foreach ($cursosConInformacion as $curso) {
+            $informacionTablaRelacion[] = [
+                'nombre' => $curso->nombre,
+                'descripcion' => $curso->descripcion,
+                'icono' => $curso->icono,
+                'color' => $curso->color,
+                'cantidad_estudiantes' => $curso->estudiantes->count(),
+            ];
+        }
+
+        return response()->json(['data' => $informacionTablaRelacion]);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Ha ocurrido un error', 'error' => $e->getMessage()], 500);
+    }
+}
+
+
+
 }
